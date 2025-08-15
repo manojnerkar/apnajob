@@ -1,0 +1,60 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.heading {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: var(--fw-bold);
+  color: var(--clr-neutral-800);
+  margin-block: 0 0.5rem;
+}
+
+.subheading {
+  font-size: 1.1rem;
+  color: var(--clr-neutral-500);
+  margin-bottom: 1.5rem;
+  max-width: 600px;
+  margin-inline: auto;
+}
+
+.searchBar {
+  width: 100%;
+  max-width: 500px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--clr-neutral-300);
+  background-color: var(--clr-neutral-100);
+  transition: var(--transition-fast);
+}
+
+.searchBar:focus {
+  outline: none;
+  border-color: var(--clr-primary-400);
+  box-shadow: 0 0 0 3px hsla(224, 82%, 57%, 0.2);
+}
+
+.loading,
+.noJobs {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--clr-neutral-500);
+  margin-top: 2rem;
+  padding: 3rem;
+  background-color: var(--clr-neutral-100);
+  border-radius: 8px;
+  border: 1px dashed var(--clr-neutral-300);
+}
+
+.jobsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}

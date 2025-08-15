@@ -1,0 +1,190 @@
+/*
+  🔹 Upgraded Navbar Styles
+  - Modernized animations with reduced-motion support
+  - Improved accessibility with focus outlines & ARIA-ready design
+  - Added CSS variables for easier theming (dark/light switch possible)
+  - Cleaner mobile menu transitions with smoother cubic-bezier curves
+  - Logical properties for better internationalization
+  - More maintainable & scalable for future features
+*/
+
+.navbar {
+  /* Theme Variables */
+  --nav-bg: #1f2937;
+  --nav-border: #374151;
+  --nav-logo-text: #ffffff;
+  --nav-link-text: #9ca3af;
+  --nav-link-hover-text: #f9fafb;
+  --nav-accent: #2563eb;
+  --nav-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --nav-mobile-bg: hsla(222, 22%, 15%, 0.95);
+
+  background-color: var(--nav-bg);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding-block: 1rem;
+  border-block-end: 1px solid var(--nav-border);
+  box-shadow: var(--nav-shadow);
+  backdrop-filter: blur(6px);
+}
+
+.container {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* ----------------- Logo ----------------- */
+.logo {
+  font-size: 1.75rem;
+  font-weight: var(--fw-extrabold, 800);
+  color: var(--nav-logo-text);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.logo:hover,
+.logo:focus-visible {
+  color: var(--nav-accent);
+  outline: none;
+}
+
+/* ----------------- Desktop Nav ----------------- */
+.navLinks {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+.navLinks a {
+  color: var(--nav-link-text);
+  text-decoration: none;
+  font-weight: var(--fw-semibold, 600);
+  padding-block: 0.5rem;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.navLinks a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--nav-accent);
+  transition: width 0.25s ease-in-out;
+}
+
+.navLinks a:hover,
+.navLinks a:focus-visible {
+  color: var(--nav-link-hover-text);
+  outline: none;
+}
+
+.navLinks a:hover::after,
+.navLinks a:focus-visible::after,
+.active::after {
+  width: 100%;
+}
+
+.active {
+  color: var(--nav-link-hover-text);
+  font-weight: var(--fw-bold, 700);
+}
+
+/* ----------------- Hamburger ----------------- */
+.hamburgerMenu {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 1001;
+}
+
+.hamburgerMenu:focus-visible {
+  outline: 2px dashed var(--nav-accent);
+  outline-offset: 4px;
+}
+
+.hamburgerIcon {
+  display: block;
+  position: relative;
+  width: 24px;
+  height: 2px;
+  background-color: var(--nav-logo-text);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.hamburgerIcon::before,
+.hamburgerIcon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--nav-logo-text);
+  transition: transform 0.3s ease, top 0.3s ease;
+}
+
+.hamburgerIcon::before { top: -8px; }
+.hamburgerIcon::after { top: 8px; }
+
+.hamburgerMenu.active .hamburgerIcon { background-color: transparent; }
+.hamburgerMenu.active .hamburgerIcon::before { top: 0; transform: rotate(45deg); }
+.hamburgerMenu.active .hamburgerIcon::after { top: 0; transform: rotate(-45deg); }
+
+/* ----------------- Mobile Menu ----------------- */
+@media (max-width: 768px) {
+  .container {
+    padding-inline: 1rem;
+  }
+
+  .hamburgerMenu {
+    display: block;
+  }
+
+  .navLinks {
+    position: fixed;
+    inset: 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    background-color: var(--nav-mobile-bg);
+    backdrop-filter: blur(10px);
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+  }
+
+  .navLinks.mobileActive {
+    transform: translateX(0);
+  }
+
+  .navLinks a {
+    font-size: 1.5rem;
+  }
+
+  .navLinks a::after {
+    bottom: -5px;
+  }
+}
+
+/* ----------------- Reduced Motion Support ----------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+  }
+}

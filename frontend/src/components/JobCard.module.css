@@ -1,0 +1,125 @@
+/* ====== JobCard Styles - Enhanced Readability Version ====== */
+.card {
+  background: linear-gradient(135deg, #3b82f6, #9333ea); /* Added gradient background */
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: #fff; /* Force light text for contrast */
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* Gradient border using pseudo-element */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  margin: -2px;
+  border-radius: inherit;
+  background: linear-gradient(120deg, var(--clr-primary-400), var(--clr-accent-400));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+/* Hover Effect */
+.card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+/* Make text always on top and readable */
+.card * {
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4); /* Improves legibility */
+}
+
+/* Title */
+.title {
+  font-size: 1.3rem;
+  font-weight: var(--fw-semibold);
+  color: #fff;
+  margin: 1rem 0 0.25rem;
+}
+
+/* Company */
+.company {
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.9); /* Brighter white */
+}
+
+/* Location */
+.location {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.85);
+  margin: 0.125rem 0 0;
+}
+
+/* Card Header */
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Logo */
+.logo {
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+  display: grid;
+  place-content: center;
+  border-radius: 50%;
+  background-color: rgba(255,255,255,0.15);
+  color: #fff;
+  font-weight: var(--fw-bold);
+  font-size: 1.25rem;
+  border: 1px solid rgba(255,255,255,0.3);
+  transition: transform 0.3s ease;
+}
+
+.card:hover .logo {
+  transform: rotate(5deg) scale(1.05);
+}
+
+/* Salary */
+.salary {
+  margin: 1rem 0 0.5rem;
+  color: #f1f1f1;
+  font-weight: var(--fw-semibold);
+}
+
+/* Tags */
+.tags {
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background-color: rgba(255,255,255,0.15);
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-right: 0.25rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.card:hover .tag {
+  background-color: rgba(255,255,255,0.25);
+}

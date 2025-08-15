@@ -1,0 +1,259 @@
+/* ====== Job Detail Page - Upgraded Version ====== */
+.container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* Main Card */
+.jobDetailCard {
+  background-color: var(--clr-neutral-100);
+  border: 1px solid var(--clr-neutral-300);
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  overflow: hidden;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.jobDetailCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.12);
+}
+
+/* --- Header --- */
+.jobHeader {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  border-bottom: 1px solid var(--clr-neutral-300);
+  background-color: var(--clr-neutral-50);
+}
+
+.logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 12px;
+  border: 1px solid var(--clr-neutral-300);
+  background-color: var(--clr-neutral-100);
+  transition: transform 0.3s ease;
+}
+
+.jobHeader:hover .logo {
+  transform: scale(1.05);
+}
+
+.titleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.title {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: var(--fw-bold);
+  color: var(--clr-neutral-900);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.companyInfo {
+  font-size: 1.1rem;
+  color: var(--clr-neutral-500);
+}
+
+/* Apply Button */
+.applyButton {
+  background: linear-gradient(135deg, var(--clr-primary-400), var(--clr-accent-400));
+  color: var(--clr-neutral-100);
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: var(--fw-semibold);
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  white-space: nowrap;
+}
+
+.applyButton:hover,
+.applyButton:focus-visible {
+  background: linear-gradient(135deg, var(--clr-primary-500), var(--clr-accent-500));
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+/* --- Body --- */
+.jobBody {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Detail Grid */
+.detailsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.5rem;
+  background-color: var(--clr-neutral-200);
+  padding: 1.5rem;
+  border-radius: 10px;
+}
+
+.detailItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.detailLabel {
+  font-size: 0.85rem;
+  color: var(--clr-neutral-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detailValue {
+  font-size: 1.1rem;
+  font-weight: var(--fw-semibold);
+  color: var(--clr-neutral-800);
+}
+
+/* Sections */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: var(--fw-bold);
+  color: var(--clr-neutral-900);
+  margin: 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--clr-neutral-300);
+}
+
+.description {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--clr-neutral-700);
+  white-space: pre-wrap;
+}
+
+/* Skills */
+.skillsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.skillTag {
+  background: linear-gradient(135deg, var(--clr-primary-400), var(--clr-accent-400));
+  color: var(--clr-neutral-100);
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  font-weight: var(--fw-semibold);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.skillTag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* --- Error State --- */
+.errorState {
+  text-align: center;
+  padding: 4rem 2rem;
+  background-color: var(--clr-neutral-100);
+  border-radius: 12px;
+  border: 1px dashed var(--clr-neutral-300);
+}
+
+.errorState h2 {
+  color: var(--clr-neutral-900);
+  margin-bottom: 0.5rem;
+}
+
+.errorState p {
+  color: var(--clr-neutral-500);
+  margin-bottom: 2rem;
+}
+
+.backButton {
+  background-color: var(--clr-neutral-800);
+  color: var(--clr-neutral-100);
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: var(--fw-semibold);
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.backButton:hover {
+  background-color: var(--clr-neutral-900);
+  transform: translateY(-2px);
+}
+
+/* --- Skeleton Loader --- */
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+.skeletonContainer {
+  background-color: var(--clr-neutral-100);
+  border: 1px solid var(--clr-neutral-300);
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.skeletonLine {
+  height: 14px;
+  background-color: var(--clr-neutral-300);
+  border-radius: 4px;
+  animation: shimmer 1.5s infinite linear;
+  background-image: linear-gradient(
+    90deg,
+    var(--clr-neutral-300) 0%,
+    var(--clr-neutral-200) 50%,
+    var(--clr-neutral-300) 100%
+  );
+  background-size: 200% 100%;
+  margin-bottom: 0.75rem;
+}
+
+.skeletonHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.skeletonLogo {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  background-color: var(--clr-neutral-300);
+  animation: shimmer 1.5s infinite linear;
+  background-image: linear-gradient(
+    90deg,
+    var(--clr-neutral-300) 0%,
+    var(--clr-neutral-200) 50%,
+    var(--clr-neutral-300) 100%
+  );
+  background-size: 200% 100%;
+}
+
+.skeletonTitleGroup {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
