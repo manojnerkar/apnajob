@@ -12,6 +12,7 @@ export default function JobCard({ job }) {
     location = 'Location',
     salary = 'Not Disclosed',
     jobType = 'Full-time',
+    category = 'General',
   } = job || {};
 
   return (
@@ -39,6 +40,7 @@ export default function JobCard({ job }) {
       <p className={styles.salary}>{salary}</p>
       {/* The tags section is pushed to the bottom via flexbox `margin-top: auto` */}
       <div className={styles.tags}>
+        <span className={styles.tag}>{category}</span>
         <span className={styles.tag}>{jobType}</span>
       </div>
     </Link>

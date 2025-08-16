@@ -1,39 +1,68 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import api from '../api/api';
+import styles from './AdminDashboard.module.css';
 
-function getAuthHeader() {
-  const token = localStorage.getItem('adminToken');
-  return { Authorization: `Bearer ${token}` };
-}
+const getAuthHeader = () => ({
+  Authorization: `Bearer ${localStorage.getItem('adminToken')}`
+});
+
+const initialFormState = {
+  title: '',
+  companyName: '',
+  category: 'IT',
+  description: '',
+  skills: '',
+  location: '',
+  salary: '',
+  jobType: 'Full-time',
+  applyLink: '',
+  lastDateToApply: ''
+};
 
 export default function AdminDashboard() {
   const [jobs, setJobs] = useState([]);
-  const [form, setForm] = useState({
-    title: '', company: '', category: 'IT', description: '', skills: '', location: '', salary: '', jobType: '', applyLink: '', lastDateToApply: ''
-  });
+  const [form, setForm] = useState(initialFormState);
+  const [editingJob, setEditingJob] = useState(null); // To handle updates
   const [message, setMessage] = useState('');
 
-  const fetchJobs = async () => {
+  const fetchJobs = useCallback(async () => {
     try {
       const res = await api.get('/jobs');
-      setJobs(res.data.data);
+      if (res.data && res.data.success) {
+        setJobs(res.data.data);
+      }
     } catch (err) {
       console.error(err);
+      setMessage('Failed to fetch jobs.');
     }
+  }, []);
+
+  useEffect(() => {
+    fetchJobs();
+  }, [fetchJobs]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm(prevForm => ({ ...prevForm, [name]: value }));
   };
 
-  useEffect(() => { fetchJobs(); }, []);
-
-  const createJob = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const payload = { ...form, skills: form.skills.split(',').map(s=>s.trim()) };
-      await api.post('/jobs', payload, { headers: getAuthHeader() });
-      setMessage('Job created');
+      if (editingJob) {
+        await api.put(`/jobs/${editingJob._id}`, payload, { headers: getAuthHeader() });
+        setMessage('Job updated successfully');
+      } else {
+        await api.post('/jobs', payload, { headers: getAuth-Header() });
+        setMessage('Job created successfully');
+      }
       setForm({ title:'', company:'', category:'IT', description:'', skills:'', location:'', salary:'', jobType:'', applyLink:'', lastDateToApply:'' });
+      setEditingJob(null);
       fetchJobs();
     } catch (err) {
-      setMessage(err.response?.data?.message || 'Error creating job');
+      const errorMsg = err.response?.data?.message || 'An error occurred';
+      setMessage(errorMsg);
     }
   };
 
@@ -48,28 +77,33 @@ export default function AdminDashboard() {
   return (
     <div>
       <h1>Admin Dashboard</h1>
-      <p>{message}</p>
+      {message && <p>{message}</p>}
 
-      <h2>Create Job</h2>
-      <form onSubmit={createJob}>
-        <input placeholder="title" value={form.title} onChange={e=>setForm({...form,title:e.target.value})} /><br/>
-        <input placeholder="company" value={form.company} onChange={e=>setForm({...form,company:e.target.value})} /><br/>
-        <input placeholder="category" value={form.category} onChange={e=>setForm({...form,category:e.target.value})} /><br/>
-        <textarea placeholder="description" value={form.description} onChange={e=>setForm({...form,description:e.target.value})} /><br/>
-        <input placeholder="skills (comma separated)" value={form.skills} onChange={e=>setForm({...form,skills:e.target.value})} /><br/>
-        <input placeholder="location" value={form.location} onChange={e=>setForm({...form,location:e.target.value})} /><br/>
-        <input placeholder="salary" value={form.salary} onChange={e=>setForm({...form,salary:e.target.value})} /><br/>
-        <input placeholder="jobType" value={form.jobType} onChange={e=>setForm({...form,jobType:e.target.value})} /><br/>
-        <input placeholder="applyLink" value={form.applyLink} onChange={e=>setForm({...form,applyLink:e.target.value})} /><br/>
-        <input type="date" value={form.lastDateToApply} onChange={e=>setForm({...form,lastDateToApply:e.target.value})} /><br/>
-        <button type="submit">Create</button>
+      <h2>{editingJob ? 'Edit Job' : 'Create Job'}</h2>
+      <form onSubmit={handleSubmit}>
+        <input name="title" placeholder="Title" value={form.title} onChange={handleChange} required /><br/>
+        <input name="companyName" placeholder="Company Name" value={form.companyName} onChange={handleChange} required /><br/>
+        <input name="category" placeholder="Category" value={form.category} onChange={handleChange} /><br/>
+        <textarea name="description" placeholder="Description" value={form.description} onChange={handleChange} /><br/>
+        <input name="skills" placeholder="Skills (comma separated)" value={form.skills} onChange={handleChange} /><br/>
+        <input name="location" placeholder="Location" value={form.location} onChange={handleChange} /><br/>
+        <input name="salary" placeholder="Salary" value={form.salary} onChange={handleChange} /><br/>
+        <input name="jobType" placeholder="Job Type" value={form.jobType} onChange={handleChange} /><br/>
+        <input name="applyLink" placeholder="Apply Link" value={form.applyLink} onChange={handleChange} /><br/>
+        <input name="lastDateToApply" type="date" value={form.lastDateToApply} onChange={handleChange} /><br/>
+        <button type="submit">{editingJob ? 'Update' : 'Create'}</button>
+        {editingJob && <button type="button" onClick={() => { setEditingJob(null); setForm({ title:'', companyName:'', category:'IT', description:'', skills:'', location:'', salary:'', jobType:'', applyLink:'', lastDateToApply:'' }); }}>Cancel Edit</button>}
       </form>
 
       <h2>Existing Jobs</h2>
       {jobs.map(j => (
         <div key={j._id} style={{border:'1px solid #ddd', padding:8, marginBottom:6}}>
-          <strong>{j.title}</strong> — {j.company}
+          <strong>{j.title}</strong> — {j.companyName}
           <div>
+            <button onClick={() => {
+              setEditingJob(j);
+              setForm({ ...j, skills: Array.isArray(j.skills) ? j.skills.join(', ') : '' });
+            }}>Edit</button>
             <button onClick={()=>deleteJob(j._id)}>Delete</button>
           </div>
         </div>

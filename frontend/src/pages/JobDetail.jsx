@@ -88,6 +88,7 @@ export default function JobDetail() {
     salary = 'Not Disclosed',
     description = 'No description provided.',
     skills = [],
+    category = 'N/A',
     applyLink = '#',
   } = job;
 
@@ -126,6 +127,10 @@ export default function JobDetail() {
             <div className={styles.detailItem}>
               <span className={styles.detailLabel}>Experience</span>
               <span className={styles.detailValue}>{experience}</span>
+            </div>
+            <div className={styles.detailItem}>
+              <span className={styles.detailLabel}>Category</span>
+              <span className={styles.detailValue}>{category}</span>
             </div>
           </section>
 

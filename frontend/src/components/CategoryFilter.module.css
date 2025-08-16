@@ -1,0 +1,71 @@
+/*
+  🔹 Category Filter Styles
+  - Clean, accessible design for the category sidebar.
+  - Uses CSS variables for theme consistency.
+  - Clear active state for selected category.
+*/
+
+.categorySidebar {
+  background-color: var(--clr-neutral-100);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--clr-neutral-300);
+  align-self: start; /* Prevents stretching in grid layout */
+  position: sticky;
+  /* Adjust this value based on your navbar's height + desired spacing.
+     100px provides a good buffer. */
+  top: 100px;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: var(--fw-bold);
+  color: var(--clr-neutral-800);
+  margin-top: 0;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--clr-neutral-300);
+}
+
+.categoryList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.categoryButton {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  font-weight: var(--fw-semibold);
+  text-align: left;
+  color: var(--clr-neutral-700);
+  background-color: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.categoryButton:hover {
+  background-color: var(--clr-neutral-200);
+  color: var(--clr-primary-500);
+}
+
+.categoryButton.active {
+  background-color: var(--clr-primary-400);
+  color: var(--clr-neutral-100);
+  font-weight: var(--fw-bold);
+}
+
+.loading, .error {
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--clr-neutral-500);
+  background-color: var(--clr-neutral-100);
+  border-radius: 12px;
+}

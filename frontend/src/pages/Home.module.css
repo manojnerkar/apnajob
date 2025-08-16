@@ -20,7 +20,7 @@
   font-size: 1.1rem;
   color: var(--clr-neutral-500);
   margin-bottom: 1.5rem;
-  max-width: 600px;
+  max-width: 700px; /* Adjust width */
   margin-inline: auto;
 }
 
@@ -53,8 +53,26 @@
   border: 1px dashed var(--clr-neutral-300);
 }
 
+.mainContent {
+  display: grid;
+  grid-template-columns: 240px 1fr; /* Sidebar and main content */
+  gap: 2rem;
+  align-items: start;
+}
+
+.jobListings {
+  /* This container will hold the grid of jobs */
+  width: 100%;
+}
+
 .jobsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
+}
+
+@media (max-width: 992px) {
+  .mainContent {
+    grid-template-columns: 1fr; /* Stack on smaller screens */
+  }
 }

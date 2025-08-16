@@ -1,86 +1,107 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../api/api';
 import JobCard from '../components/JobCard';
 import JobCardSkeleton from '../components/JobCardSkeleton';
 import styles from './Home.module.css';
+import CategoryFilter from '../components/CategoryFilter';
 
 export default function Home() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchJobs = async () => {
       setLoading(true);
+      setError(null); // Reset error on each new fetch
       try {
-        const response = await api.get('/jobs');
-        // The job data is nested inside a 'data' property, similar to the AdminDashboard.
-        // We need to access response.data.data to get the array of jobs.
-        setJobs(response.data.data || []);
+        // Construct query parameters, only including them if they have a value.
+        const params = {};
+        if (searchTerm) params.search = searchTerm;
+        if (selectedCategory) params.category = selectedCategory;
+
+        const response = await api.get('/jobs', { params });
+        if (response.data && response.data.data) {
+          setJobs(response.data.data);
+        } else {
+          // Handle cases where the API returns success: false
+          setError(response.data.message || 'Failed to load jobs.');
+          setJobs([]);
+        }
       } catch (error) {
-        console.error('Error fetching jobs:', error);
-        setJobs([]); // Set to empty array on error to prevent crashes
-      }
-      finally {
+        console.error('Failed to fetch jobs:', error);
+        // Provide a more user-friendly error message based on the error type
+        if (error.code === 'ERR_NETWORK') {
+          setError('Network Error: Could not connect to the server. Please ensure the backend is running and accessible.');
+        } else {
+          setError(`An error occurred while fetching jobs: ${error.message}`);
+        }
+        setJobs([]); // Clear jobs on error
+      } finally {
         setLoading(false);
       }
     };
 
-    fetchJobs();
-  }, []);
+    // Debounce search/filter to avoid excessive API calls
+    const timerId = setTimeout(() => {
+      fetchJobs();
+    }, 500); // 500ms delay
 
-  // Memoize the filtered jobs to avoid re-calculating on every render
-  const filteredJobs = useMemo(() => {
-    if (!searchQuery) {
-      return jobs;
-    }
-    return jobs.filter(
-      (job) =>
-        job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        job.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        job.location.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [jobs, searchQuery]);
+    // Cleanup function to clear the timeout
+    return () => clearTimeout(timerId);
+  }, [searchTerm, selectedCategory]);
 
-  const renderJobCards = () => {
-    if (loading) {
-      // Show 8 skeleton loaders for a good initial impression
-      return Array.from({ length: 8 }).map((_, index) => (
-        <JobCardSkeleton key={index} />
-      ));
-    }
-
-    if (filteredJobs.length === 0) {
-      return null; // The empty message will be shown outside the grid
-    }
-
-    return filteredJobs.map((job) => <JobCard key={job._id} job={job} />);
+  const handleSelectCategory = (category) => {
+    setSelectedCategory(category);
   };
 
   return (
     <div className={styles.container}>
-      <div className={styles.hero}>
+      <header className={styles.hero}>
         <h1 className={styles.heading}>Find Your Next Opportunity</h1>
         <p className={styles.subheading}>
-          Search through thousands of open positions and find the perfect role
-          for you.
+          Search through thousands of open positions in our job portal. Your dream job is waiting for you.
         </p>
         <input
           type="text"
+          placeholder="Search by title, company, or skill..."
           className={styles.searchBar}
-          placeholder="Search by title, company, or location..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
+      </header>
+
+      <div className={styles.mainContent}>
+        <CategoryFilter
+          selectedCategory={selectedCategory}
+          onSelectCategory={handleSelectCategory}
+        />
+        <section className={styles.jobListings}>
+          {loading ? (
+            <div className={styles.jobsGrid}>
+              {Array.from({ length: 8 }).map((_, index) => (
+                <JobCardSkeleton key={index} />
+              ))}
+            </div>
+          ) : error ? (
+            <div className={styles.noJobs}>
+              <p style={{ color: 'var(--clr-error-500)' }}>{error}</p>
+            </div>
+          ) : jobs.length > 0 ? (
+            <div className={styles.jobsGrid}>
+              {jobs.map((job) => (
+                <JobCard key={job._id} job={job} />
+              ))}
+            </div>
+          ) : (
+            <div className={styles.noJobs}>
+              <p>No jobs found. Try adjusting your search or category.</p>
+            </div>
+          )}
+        </section>
       </div>
-
-      <div className={styles.jobsGrid}>{renderJobCards()}</div>
-
-      {!loading && filteredJobs.length === 0 && (
-        <p className={styles.noJobs}>
-          No jobs found matching your search. Try a different keyword.
-        </p>
-      )}
     </div>
   );
 }

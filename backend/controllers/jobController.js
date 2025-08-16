@@ -81,3 +81,24 @@ exports.markExpired = async (req, res, next) => {
     next(err);
   }
 };
+
+// exports.getCategories = async (req, res, next) => {
+//   try {
+//     // Fetch distinct categories from Job collection
+//     const categories = await Job.distinct("category");
+
+//     res.json({ categories });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+
+exports.getCategories = async (req, res, next) => {
+  try {
+    const categories = await Job.distinct("category");
+    res.json({ categories });
+  } catch (err) {
+    next(err);
+  }
+};
+
