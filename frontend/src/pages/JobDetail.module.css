@@ -1,6 +1,6 @@
 /* ====== Job Detail Page - Upgraded Version ====== */
 .container {
-  max-width: 900px;
+  max-width: 900px; /* Reverted to original width */
   margin: 2rem auto;
   padding: 0 1rem;
 }
@@ -52,7 +52,7 @@
 }
 
 .title {
-  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-size: clamp(1.3rem, 3.5vw, 1.7rem); /* Reduced font size */
   font-weight: var(--fw-bold);
   color: var(--clr-neutral-900);
   margin: 0;
@@ -60,7 +60,7 @@
 }
 
 .companyInfo {
-  font-size: 1.1rem;
+  font-size: 1rem; /* Reduced font size */
   color: var(--clr-neutral-500);
 }
 
@@ -68,7 +68,8 @@
 .applyButton {
   background: linear-gradient(135deg, var(--clr-primary-400), var(--clr-accent-400));
   color: var(--clr-neutral-100);
-  padding: 0.75rem 1.5rem;
+  padding: 0.7rem 1.4rem; /* Slightly smaller padding */
+  font-size: 0.9rem;
   border-radius: 8px;
   font-weight: var(--fw-semibold);
   text-decoration: none;
@@ -109,14 +110,14 @@
 }
 
 .detailLabel {
-  font-size: 0.85rem;
+  font-size: 0.8rem; /* Reduced font size */
   color: var(--clr-neutral-500);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .detailValue {
-  font-size: 1.1rem;
+  font-size: 1rem; /* Reduced font size */
   font-weight: var(--fw-semibold);
   color: var(--clr-neutral-800);
 }
@@ -129,7 +130,7 @@
 }
 
 .sectionTitle {
-  font-size: 1.25rem;
+  font-size: 1.15rem; /* Reduced font size */
   font-weight: var(--fw-bold);
   color: var(--clr-neutral-900);
   margin: 0;
@@ -138,7 +139,7 @@
 }
 
 .description {
-  font-size: 1rem;
+  font-size: 0.95rem; /* Reduced font size */
   line-height: 1.65;
   color: var(--clr-neutral-700);
   white-space: pre-wrap;
@@ -156,7 +157,7 @@
   color: var(--clr-neutral-100);
   padding: 0.35rem 0.85rem;
   border-radius: 9999px;
-  font-size: 0.9rem;
+  font-size: 0.85rem; /* Reduced font size */
   font-weight: var(--fw-semibold);
   transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
